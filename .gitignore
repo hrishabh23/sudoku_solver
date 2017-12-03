@@ -1,0 +1,4 @@
+#build
+build/apps/*
+build/objects/*
+
