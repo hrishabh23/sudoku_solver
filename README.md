@@ -1,7 +1,8 @@
-#Sudoku Solver
+# Sudoku Solver
+
 The program solves the Sudoku puzzle. This the terminal based program. Better than my last project on Sudoku, because this can solve hardest of puzzles. Uses the method of backttracking aka. bruteforce. Accepts input in .txt file format as well as directly in terminal.
 
-##Getting Started
+## Getting Started
 To compile:
 1: Open Terminal and go to the project directory.
 2: Type 'make' to compile the project
