@@ -79,16 +79,23 @@ void assign_initial(short &row, short &column, int grid[][INDEX])
 		}
 }
 
-bool go_to_previous(short &row, short &column, struct blank_unit_list** current_node)
+bool go_to_previous(short &row, short &column, struct blank_unit_list **current_node, short flag)
 {
-	if((*current_node)->previous==NULL)
+	if((*current_node)->previous==nullptr)
 	{
-		std::cout<<"Error! Something is wrong in puzzle. It does not have any solution."<<std::endl;
+		if(!flag)
+			std::cout<<"Error! Something is wrong in puzzle. It does not have any solution."<<std::endl;
 		return false;
 	}
-	(*current_node) = (*current_node)->previous;
+	
+	struct blank_unit_list **temp;
+	*temp = *current_node;
+	
+	*current_node=(*current_node)->previous;
 	row = (*current_node)->row;
 	column = (*current_node)->column;
+	
+	delete *temp;
 	return true;
 }
 
@@ -135,7 +142,7 @@ bool solved(int grid[][INDEX], short row, short column)
 	return false;
 }
 
-void go_to_next(short &row, short &column, int grid[][INDEX], struct blank_unit_list** current_node)
+bool go_to_next(short &row, short &column, int grid[][INDEX], struct blank_unit_list** current_node)
 {
 	short row_index = (column!=8)?row:row+1, column_index;
 	for(column_index = (column!=8)?(column + 1):0 ; row_index < INDEX; column_index++)
@@ -145,21 +152,27 @@ void go_to_next(short &row, short &column, int grid[][INDEX], struct blank_unit_
 			column_index=0;
 			row_index++;
 		}
-		if(row_index==9) return;
+		if(row_index==9) return false;
 		
 		if(!grid[row_index][column_index])
 		{
 			row = row_index;
 			column = column_index;
 			
-			struct blank_unit_list* next_node = new struct blank_unit_list;
+			struct blank_unit_list* next_node = new (std::nothrow) struct blank_unit_list;
+			if(!next_node)
+			{
+				std::cout<<"Error! Memory can't be allocated."<<std::endl;
+				return true;
+			}
 			next_node->row = row;
 			next_node->column = column;
 			next_node->previous = (*current_node);
 			(*current_node) = next_node;
-			return;
+			return false;
 		}
 	}
+	return false;
 }
 
 void print_grid(int grid[][INDEX])

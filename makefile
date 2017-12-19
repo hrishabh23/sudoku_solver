@@ -1,5 +1,5 @@
 CXX      := g++
-CXXFLAGS := -Wall -O3
+CXXFLAGS := -Wall -O3  -std=c++0x
 LDFLAGS  := -L/usr/lib -lstdc++ -lm
 BUILD    := build
 PACKAGE := `pkg-config --cflags --libs gtk+-3.0`
